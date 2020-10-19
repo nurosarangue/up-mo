@@ -1,0 +1,46 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Matricula" rendered="#{matriculaBean.matricula != null}">
+      
+             <p:panelGrid columns="2">
+                <h:outputLabel value="Nome:"/>
+                <p:inputText value="#{matriculaBean.matricula.nome}"/>
+             
+             
+             <h:outputLabel value="Avaria"/>
+             <p:selectOneMenu value="#{matriculaBean.matricula.avaria}" converter="avariaCoverter">
+              <f:selectItem itemLabel="::Selecione::" itemValue="null"/>
+                 <f:selectItems value="#{matriculaBean.avarias}" var="avaria"
+                     itemLabel="#{avaria.nome}" itemValue="#{avaria}"/>
+             </p:selectOneMenu>
+         <ui:remove>  
+              <h:outputLabel value="Prof:"/>
+             <p:selectOneMenu value="#{matriculaBean.matricula.profissao}" converter="profissaoConverter">
+              <f:selectItem itemLabel="::Selecione::" itemValue="null"/>
+                 <f:selectItems value="#{matriculaBean.profissoes}" var="profissao"
+                     itemLabel="#{profissao.label}" itemValue="#{profissao}"/>
+             </p:selectOneMenu>
+        </ui:remove>
+               <h:outputLabel value="Data"/>
+                 <p:calendar value="#{matriculaBean.matricula.dataMatricula}"
+                  mask="99/99/9999"/>
+             </p:panelGrid> 
+             
+              <p:commandButton value="Salvar" icon="salvar-icon" action="#{matriculaBean.salvar}" 
+              update="matricula_form"/>
+               
+           <p:commandButton icon="voltar-icon" value="Cancelar" style="color:blue;" 
+            action="#{matriculaBean.cancelar}" update="matricula_form"/>
+           
+             
+        </p:panel>
+  
+</html>

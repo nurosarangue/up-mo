@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+ <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>Menu</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index.jsf">Inicio</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-edit"></i> Cadastro <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#{request.contextPath}/admin/cliente.jsf">Cliente</a></li>
+                      <li><a href="#{request.contextPath}/admin/funcionario.jsf">Funcionario</a></li>
+                    
+                    
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-desktop"></i>Operações <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#{request.contextPath}/admin/avarias.jsf">Avarias</a></li>
+                       <li><a href="#{request.contextPath}/cliente/avarias.jsf">Participar Avarias</a></li>
+                        <li><a href="#{request.contextPath}/admin/avariasResolvidas.jsf">Avarias Resolvidas</a></li>
+                      
+                     
+                    </ul>
+                  </li>
+                
+                </ul>
+              </div>
+             
+
+            </div>
+
+
+
+
+
+</html>

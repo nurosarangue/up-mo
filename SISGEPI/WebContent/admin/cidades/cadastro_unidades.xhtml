@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<ui:composition
+    template="/pages/layout/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="Unidades e Zonas"></ui:define>
+	<ui:define name="Headr">
+	   <meta charset="utf-8"/>
+	</ui:define>
+	
+	<ui:define name="principal">
+	<p:panel header="Cadastro de Unidades e Zonas">
+	   <h:form id="unidade-form">
+	   <p:growl id="msgs" autoUpdate="true"/>
+	   
+	   <p:toolbar id="toolbar">
+		  <f:facet name="left">
+			<p:commandButton value="Nova" icon="ui-icon-documen" 
+			    oncomplete="PF('CadastroUnidadeDialog').show()" 
+			    process="@this" update="unidade-dialog">
+			
+			  <p:resetInput target="unidade-dialog" />
+			</p:commandButton>
+			  
+			  <span class="ui-separator"> 
+		       <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		     </span>
+		 
+		      <p:commandButton title="Editar" icon="ui-icon-pencil" 
+		         disabled="#{unidadeBean.unidadeSelecionada == null}"
+		         oncomplete="PF('CadastroUnidadeDialog').show()"
+		         process="@this" update="unidade-dialog">
+		         
+		           <p:resetInput target="unidade-dialog" />
+		           <f:setPropertyActionListener value="#{unidadeBean.unidadeSelecionada}" 
+		         target="#{unidadeBean.unidade}"/>
+		      </p:commandButton> 
+		      <p:commandButton title="Apagar" icon="ui-icon-trash"
+		         disabled="#{unidadeBean.unidadeSelecionada == null}"
+		         oncomplete="PF('exclusaoUnidadeDialog').show()" process="@this">
+		       </p:commandButton>
+
+		  </f:facet>
+       </p:toolbar>
+       <br/>
+	   
+	    <p:dataTable value="#{unidadeBean.unidades}" var="unidade" id="tabela-unidades" 
+	        paginator="true" rows="5" rowsPerPageTemplate="5, 15, 25"
+	        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                        {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        selection="#{unidadeBean.unidadeSelecionada}" selectionMode="single"
+                        rowKey="#{unidade.id}">
+	      
+	              <p:ajax event="rowSelect" update=":unidade-form:toolbar"/>
+	              <p:ajax event="rowUnselect" update="unidade-form:toolbar"/>
+	      
+	      <p:column headerText="Nome da Unidade" filterBy="#{unidade.nome}"
+	              filterMatchMode="contains" sortBy="#{unidade.nome}">
+	        <h:outputText value="#{unidade.nome}" />
+	      </p:column>
+	      
+	      <p:column headerText="Zona">
+	        <h:outputText value="#{unidade.zona.label}"/>
+	      </p:column>
+	      
+	    </p:dataTable>
+	    
+	    <p:dialog header="Nova Unidade" widgetVar="CadastroUnidadeDialog"
+	       modal="true" resizable="false" draggable="false" 
+	       id="unidade-dialog" closeOnEscape="true">
+	          
+	          <p:panelGrid id="unidade-gride" columns="2">
+	          <h:outputText value="Nome da Zona"/>
+	              <p:selectOneMenu value="#{unidadeBean.unidade.zona}">
+	                     <f:selectItem itemLabel="::Selecione::" itemValue="#{nul}"/>
+                         <f:selectItems value="#{unidadeBean.zonas}" var="zona"
+                           itemLabel="#{zona.label}" itemValue="#{zona}"/>
+	              </p:selectOneMenu> 
+	             <h:outputText value="Nome da Unidade"/>
+	             <p:inputText value="#{unidadeBean.unidade.nome}"/>
+	                  
+	          </p:panelGrid>
+	    <br/>
+	            <p:commandButton value="Salvar" icon="ui-icon-disk"
+					action="#{unidadeBean.salvar}"
+					oncomplete="if(!args.validationFailed) PF('CadastroUnidadeDialog').hide()"
+					update="tabela-unidades unidade-gride toolbar"/>
+					
+				<p:commandButton value="Cancelar" icon="ui-icon-close"
+				   style="margin-left:8px;"
+				   oncomplete=" PF('CadastroUnidadeDialog').hide()" 
+				   process="@this" action="#{unidadeBean.cancelar}"
+				   update="tabela-unidades toolbar"/>
+	    </p:dialog>
+	    
+	     <p:confirmDialog message="Deseja realmente excluir esta Unidade?"
+			  widgetVar="exclusaoUnidadeDialog" header="Excluir Unidade">
+             <p:commandButton value="Sim" action="#{unidadeBean.excluir}"
+			    process="@this" oncomplete="PF('exclusaoUnidadeDialog').hide()"
+			    update="toolbar tabela-unidades" />		   
+			   
+			    <p:commandButton value="Não"
+				oncomplete="PF('exclusaoUnidadeDialog').hide()" process="@this"
+				update="toolbar tabela-unidades">
+				<f:setPropertyActionListener
+			   target="#{unidadeBean.unidadeSelecionada}" value="#{null}" />
+			</p:commandButton>
+		</p:confirmDialog>
+	    
+	  </h:form>
+	</p:panel>
+
+	</ui:define>
+	
+</ui:composition>

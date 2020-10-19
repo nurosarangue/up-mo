@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/admin/principal/index.xhtml">
+	<ui:define name="titulo">
+	Registar Cliente
+	</ui:define>
+	<ui:define name="menu">
+	
+	   <ui:include src="/admin/template/menu.xhtml"></ui:include>
+	   
+	</ui:define>
+	
+	<ui:define name="usuarioLogado">
+	   <ui:include src="/admin/template/usuario_logado.xhtml"></ui:include>
+	</ui:define>
+	
+	<ui:define name="corpo">
+	<div class="x_panel">
+	<h:form id="form" styleClass="form-horizontal">
+	<p:messages closable="true" id="mensagem"/>	 
+<div class="panel panel-info ">
+<div class="panel-body">
+	
+	<h:panelGroup styleClass="sublinhar fw-700" style="float: right;">
+			<h:commandLink title="Novo registo" styleClass="btn btn-success"
+				actionListener="#{clienteBean.novoRegisto}" immediate="true"
+				rendered="#{clienteBean.cadastroBoolean==false}">
+				<span class="fa fa-plus"
+				style="font-size: 15px; font-weight: bold;"> Novo registo</span>
+			</h:commandLink>
+			<h:commandLink styleClass="btn btn-success"
+				title="Voltar à Pesquisa"
+				actionListener="#{clienteBean.voltarPesquisa}" immediate="true"
+				rendered="#{clienteBean.cadastroBoolean !=false}">
+				<span class="fa fa-history"
+				style="font-size: 15px; font-weight: bold;"> Voltar à
+				pesquisa</span>
+			</h:commandLink>
+				</h:panelGroup>
+				
+		
+		<h:panelGroup rendered="#{clienteBean.cadastroBoolean==false}">
+
+					<div class="form-group">
+
+						<div class="col-sm-6">
+							<div class="input-group">
+								<h:inputText styleClass="form-control"
+									value="#{clienteBean.pesquisa}">
+									<f:passThroughAttribute name="placeholder"
+										value="Pesquisa por nome do cliente ou numero do contador ou telefone" />
+									<f:passThroughAttribute name="autofocus" value="true" />
+									
+									<p:ajax event="keyup" listener="#{clienteBean.pesquisarCliente}"
+										update="tabela"></p:ajax>
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandLink
+										styleClass="btn btn-success" action="#{clienteBean.pesquisarCliente}"
+										value="Pesquisar" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<h:dataTable value="#{clienteBean.clientes}" var="cliente" id="tabela"
+						styleClass="table table-bordered table-hover"
+						headerClass="cabecalho-T" footerClass="rodape-T">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#" />
+							</f:facet>
+							<h:outputText value="#{cliente.id}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Nome do cliente" />
+							</f:facet>
+							<h:outputText value="#{cliente.nome}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Contador" />
+							</f:facet>
+							<h:outputText value="#{cliente.contador}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Opções" />
+							</f:facet>
+											
+							
+								<h:commandLink title="Editar?" immediate="true"
+									actionListener="#{clienteBean.editar(cliente)}" styleClass="tooltip-left"
+									style="margin-left:1%; color: blue;">
+									<span class="fa fa-pencil" style="font-size: 120%"
+										></span>
+								</h:commandLink>
+								
+								<h:commandLink immediate="true" title="Excluir?"
+									styleClass="tooltip-left" id="id-excluir"
+									style="color: red; margin-left:2%;">
+									<span class="fa fa-trash-o" style="font-size: 120%"
+										></span>
+									<p:ajax event="click"
+										listener="#{clienteBean.prepararExclusao(cliente)}"
+										update="form:id-panelGroup-confirma-modal" />
+									<f:passThroughAttribute name="data-toggle" value="modal" />
+									<f:passThroughAttribute name="data-target" value="#myModal" />
+								</h:commandLink>
+								
+								
+								<h:commandLink immediate="true" title="Imprimir"
+								actionListener="#{clienteBean.imprimirDadosCliente(cliente)}"
+								style="color: blue; margin-left:1%;">
+								<span class="fa fa-print" style="font-size: 150%"></span>
+								</h:commandLink>
+							 
+
+						</h:column>
+
+						<f:facet name="footer">
+							<h:outputText
+								value=" #{clienteBean.quantidadeRegistos} registo(s) encontrado(s)"></h:outputText>
+						</f:facet>
+					</h:dataTable>
+				</h:panelGroup>
+				
+				
+				<!-- Novo cadastro (e edicao) do cliente  -->
+				
+						<h:panelGroup rendered="#{clienteBean.novoCadastroBoolean==true}">
+
+
+
+					<div class="form-group">
+						<h:outputLabel value="Nome"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-5">
+							<h:inputText value="#{clienteBean.cliente.nome}" required="true"
+							requiredMessage="O campo do nome não pode ser vazio"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+					<label class="col-sm-3 control-label">Provincia de
+						Residencia</label>
+					<div class="col-sm-5">
+
+						<h:selectOneMenu
+							value="#{clienteBean.provincia}" converter="provinciaConverter"
+							styleClass="form-control" required="true"
+							requiredMessage="O campo provincia é obrigatório">
+							<f:selectItem itemLabel="::Selecione::" itemValue="null" />
+							<f:selectItems value="#{clienteBean.provincias}" var="prov"
+								itemLabel="#{prov.nome}" itemValue="#{provincia}" />							
+							<p:ajax event="change"  update="combo-cidades" />
+						</h:selectOneMenu>
+					</div>
+				</div>	
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Delegação</label>
+					<div class="col-sm-5">
+						<h:selectOneMenu styleClass="form-control"
+							id="combo-cidades" value="#{clienteBean.cliente.cidade}"
+			               disabled="#{clienteBean.provincia == null}"
+			                converter="cidadeEntityCoverter">
+							 <f:selectItem itemLabel="::Selecione::" itemValue="null"/>
+                        <f:selectItems value="#{clienteBean.cidades}" var="cidade"
+                             itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
+						</h:selectOneMenu>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Bairro</label>
+					<div class="col-sm-4">
+					<h:inputText styleClass="form-control" value="#{clienteBean.cliente.bairo}"
+                  >
+						</h:inputText>
+					</div>
+				</div>
+					<div class="form-group">
+						<h:outputLabel value="N. Contador"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-3">
+							<h:inputText value="#{clienteBean.cliente.contador}" required="true"
+							requiredMessage="O campo do contador não pode ser vazio"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					
+						
+					
+					<div class="form-group">
+						<h:outputLabel value="Tell/Cel."
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-3">
+							<h:inputText value="#{clienteBean.cliente.telefone}" required="true"
+							requiredMessage="O campo do Telefone Celular não pode ser vazio"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>			
+				
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Tipo de Instalação</label>
+					<div class="col-sm-3">
+		<h:selectOneMenu styleClass="form-control" value="#{clienteBean.cliente.instalacao}">
+				<f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                  <f:selectItems value="#{clienteBean.instalacoes}" var="instalacao"
+                  itemLabel="#{instalacao.label}" itemValue="#{instalacao}"/>
+                
+						</h:selectOneMenu>
+					</div>
+				</div>
+				
+				
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Avenida/Rua</label>
+					<div class="col-sm-3">
+		<h:inputText styleClass="form-control"  value="#{clienteBean.cliente.avenida}">
+						</h:inputText>
+					</div>
+				</div>
+				
+					
+					<div class="row" style="text-align: center; margin-left: 2%;margin-top:1%;">
+
+						<h:commandButton styleClass="btn btn-success"
+							action="#{clienteBean.salvar}" value="Guardar" />
+						<h:commandButton styleClass="btn btn-primary"
+							action="#{clienteBean.voltarPesquisa}" style="margin-left:1%;"
+							immediate="true" value="Voltar" />
+					</div>
+				
+				</h:panelGroup>
+		
+		
+	</div></div>
+	
+	
+	<!-- Modal -->
+				<div class="modal default" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" data-backdrop="static"
+					style="padding-top: 210px;">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&#10006;</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">
+									<h:outputLabel value="Você Tem certeza?" />
+								</h4>
+
+							</div>
+							<div class="modal-body">
+								<h:panelGroup id="id-panelGroup-confirma-modal">
+									<h:outputText value="Caro Admin! Nao e possivel excluir o cliente" />
+									<p>
+										<h:outputLabel value="Com o nome: " />
+										<p:spacer />
+										<p:spacer />
+										<h:outputLabel
+											value="  #{clienteBean.clienteSelecionado.nome}"
+											style="font-weight: 600;" />									
+									</p>
+									<p>
+									<h:outputText value="Porque esta vinculado com outros servicos" />
+									</p>
+								</h:panelGroup>
+							</div>
+							<div class="modal-footer">
+								<h:commandButton type="button" title="Close?"
+									class="btn btn-primary" value="Fechar">
+									<f:passThroughAttribute name="data-dismiss" value="modal" />
+								</h:commandButton>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Modal -->
+	
+	
+	</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+</html>

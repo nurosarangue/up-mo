@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Lista de Profissões Cadastradas" style="width:100%;" 
+                 rendered="#{avariaBean.avaria == null}">
+        
+            <p:commandButton icon="adicionar-icon" value="Novo Resisto" style="color:green;" 
+            action="#{avariaBean.novaAvaria}"
+                             update="@form"/>
+            <br/><br/>
+            
+            
+             
+            <p:dataTable value="#{avariaBean.avarias}" var="avaria" filteredValue="#{avariaBean.avariasFiltradas}"
+                        paginator="true" rows="5" rowsPerPageTemplate="5, 10 15" 
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                        {PageLinks} {NextPageLink} {LastPageLink}"
+                        id="tabela-participacos">
+                
+                <p:column headerText="Grao de Instrução" style="width:150px;" 
+                          filterBy="#{avaria.nome}" filterMatchMode="contains">
+                     <h:outputText value="#{avaria.nome}"/>
+                </p:column>
+
+                <p:column headerText="Data">
+                     <h:outputText value="#{avaria.dataCriacao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                     </h:outputText>
+                </p:column>
+                
+                   <p:column style="text-align:center" exportable="false">
+                       <p:commandButton icon="editar-icon" action="#{avariaBean.editar(avaria)}"
+                       style="color:blue;" update=":avaria_form"/>
+                       
+                       <p:commandButton icon="apagar-icon" 
+                       actionListener="#{avariaBean.prepararExclusao(avaria)}"
+                       oncomplete="PF('Confirmar Eclusao').show();"
+                       style="color:red; margin-left:20px;" update="@form"/>
+                   </p:column>
+                
+            </p:dataTable>
+                 <br/>
+                 <h:commandLink>
+                    <p:graphicImage value="/resources/imagens/exportar_xls.png"/>
+                    <p:dataExporter type="xls"  target="tabela-participacos" 
+                    fileName="Participacoes"/>
+                 </h:commandLink>
+                     
+                    <h:commandLink style="margin-left:10px">
+                    <p:graphicImage value="/resources/imagens/exportar_pdf.png"/>
+                    <p:dataExporter type="pdf"  target="tabela-participacos" 
+                    fileName="Participacoes" encoding="iso-8859-1"/>
+                    </h:commandLink>
+            
+               <p:confirmDialog message="Deseja Apagar? #{avariaBean.avariaExclusao.nome}"
+                  widgetVar="Confirmar Eclusao">
+                    <p:commandButton value="Sim" action="#{avariaBean.apagar()}"
+                    oncomplete="PF('Confirmar Eclusao').hide();" update="@form"/>
+                    <p:commandButton value="Nao" oncomplete="PF('Confirmar Eclusao').hide();"/>
+               </p:confirmDialog>
+           
+            
+        </p:panel>
+
+  
+</html>

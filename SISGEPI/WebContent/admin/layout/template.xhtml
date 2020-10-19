@@ -1,0 +1,51 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:head>
+	     <title> SISGEPI - <ui:insert name="titulo"/> </title>
+	     <meta charset="utf-8"/>
+	     <ui:insert name="header" />
+	    <!--  <link rel="stylesheet" href="{request.contextPath}/css/tema.css"/>
+	     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/vendor/css/bootstrap.css" />
+	     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/vendor/css/bootstrap-responsive.css" />
+         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/vendor/css/font-awesome.css" /> -->
+	     <link rel="stylesheet" href="#{request.contextPath}/css/tema.css" />
+	</h:head>
+	
+	<h:body>
+	  <h:form>
+	     <p:menubar>
+	     <p:submenu label="Direção" icon="fa fa-building">
+	           <p:menuitem value="Delegação" url="/cidade/manutencao/" icon="fa fa-building"/>
+	           <p:menuitem value="Unidades" url="/unidade/monutencao/" icon="fa fa-building"/>
+	           <p:menuitem value="Reparação" url="/reparacao/monutencao/" icon="fa fa-building"/>
+	           <p:menuitem value="Bairo" url="/bairo/monutencao/" icon="fa fa-building"/>
+	           <p:menuitem value="Avenida" url="/avenida/monutencao/" icon="fa fa-building"/>
+	          <p:submenu label="Piquete" icon="fa fa-building">
+	               <p:menuitem value="Funcionarios" url="/usuariofuncionario/manutencao/" icon="fa fa-users"/>	        
+<ui:remove>
+	               <p:menuitem value="Profissões" url="/avaria/manutencao/" icon="fa fa-users"/>	
+</ui:remove>	               
+	               <p:menuitem value="Equipe" url="/equipe/monutencao/" icon="fa fa-users"/>
+	          </p:submenu>
+	        </p:submenu>
+	        <p:menuitem value="Cadastro de Cliente" url="/cliente/manutencao/" icon="avrias-icon"/>
+	        <p:menuitem value="Sair" action="#{authenticationContext.logout}" icon="fa fa-arrow-circle-right"/>
+	
+	        
+<ui:remove>
+site para baixar icons = www.primefaces.org/showcase/ui/misc/fa.xhtm/ 
+</ui:remove>
+	     </p:menubar>
+	  </h:form>
+	    <ui:insert name="principal"/>
+	    
+	</h:body>
+
+
+</html>

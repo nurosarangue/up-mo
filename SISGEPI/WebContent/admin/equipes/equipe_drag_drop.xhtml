@@ -1,0 +1,59 @@
+<ui:composition
+   template="/pages/layout/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+ 
+    <ui:define name="title">Equipe</ui:define>
+    
+    <ui:define name="principal">
+    <ui:define name="headr">
+	   <meta charset="utf-8"/>
+	   <script type="text/javascript">
+			function handleDrop(event, ui) {
+				var droppedUsuario = ui.draggable;
+
+				droppedUsuario.fadeOut('fast');
+			}
+		</script>
+	</ui:define>
+       <h:form id="Equipe_drag_drop_form">
+          <p:fieldset legend="Funcionarios Activos" style="margin-top:10px">
+            <p:dataGrid id="funcionarios-activos" value="#{equipeDragDropBean.usuariosFuncionario}" var="usuario" columns="4">
+               <p:panel id="painel-equipes" header="#{usuario.nome}">
+                  <h:panelGrid columns="2">
+                     <h:outputText value="Grau de Instrução:"/>
+                     <h:outputText value="#{usuario.grauIntrucao}"/>
+                  </h:panelGrid>
+               </p:panel>
+                  <p:draggable for="painel-equipes" revert="true"
+                     handle=".ui-panel-titlebar" stack=".ui-panel"></p:draggable>
+            </p:dataGrid>
+          </p:fieldset>
+         
+          <p:fieldset id="equipe" legend="Equipe A" style="margin-top:10px">
+             <p:outputPanel id="drop-area" >
+               <h:outputText value="Arraste os nomes dos Funcionarios e solte aqui para formar Equipes"
+                style="font-size:20px;" rendered="#{empty equipeDragDropBean.funcionariosInseridos}"/>
+               <p:dataTable value="#{equipeDragDropBean.funcionariosInseridos}" var="usuario"
+                        rendered="#{not empty equipeDragDropBean.funcionariosInseridos}">
+                 <p:column headerText="Nome">
+                    <h:outputText value="#{usuario.nome}"/>
+                 </p:column>
+                 <p:column headerText="Grau de Instrução:">
+                    <h:outputText value="#{usuario.grauIntrucao}"/>
+                 </p:column>
+               </p:dataTable>
+             </p:outputPanel>
+          </p:fieldset>
+          <p:droppable for="equipe" datasource="funcionarios-activos" onDrop="handleDrop" tolerance="touch"
+               activeStyleClass="ui-state-highlight">
+             <p:ajax listener="#{equipeDragDropBean.onUsuarioDrop}" update="drop-area funcionarios-activos"></p:ajax>
+          </p:droppable>
+	   </h:form>     
+     
+    </ui:define>
+</ui:composition>

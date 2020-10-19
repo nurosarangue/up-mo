@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+
+<ui:composition template="/principal/principal.xhtml">
+	<ui:define name="titulo">
+	Registar Avarias
+	</ui:define>
+	
+	
+	
+	<ui:define name="corpo">
+	<div class="x_panel">
+<div class="well" style="overflow: auto;">
+<H4>Registo de Avarias</H4>
+</div>
+<h:form styleClass="form-horizontal">
+<p:messages closable="true" id="mensagem"/>	 
+<div class="panel panel-info ">
+<div class="panel-body">
+
+
+
+
+
+<h:panelGroup rendered="#{registarAvariasBean.painelGroup1==false}" >
+<div class="form-group">
+							<div class="col-sm-6" >
+								<div class="input-group">
+									<h:inputText styleClass="form-control"
+										value="#{registarAvariasBean.pesquisa}">
+										<f:passThroughAttribute name="placeholder"
+											value="Insira o numero do seu contador" />
+										<f:passThroughAttribute name="autofocus" value="true" />
+									</h:inputText>
+									<span class="input-group-btn"> <h:commandLink
+											styleClass="btn btn-primary" value="Buscar!"
+											actionListener="#{registarAvariasBean.buscarCliente}">
+											</h:commandLink>
+									</span>
+								</div>
+
+							</div>
+						</div>
+						
+	<h:dataTable value="#{registarAvariasBean.clientes}" var="cliente" 
+	style="width: 80%;margin-left:0%;"	id="tlb-sc-cliet" rendered="#{registarAvariasBean.clientes !=null}"		styleClass="table table-bordered table-hover"
+						headerClass="cabecalho-T" footerClass="rodape-T">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#" />
+							</f:facet>
+							<h:outputText value="#{cliente.id}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Nome" />
+							</f:facet>
+							<h:outputText value="#{cliente.nome}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Opções" />
+							</f:facet>							
+								<h:commandLink title="Proximo" immediate="true"
+									styleClass="tooltip-left" value="Seguinte"
+									actionListener="#{registarAvariasBean.seguintePrencherForm(cliente)}"
+									style="margin-left:1%; color: blue;">
+									
+								</h:commandLink>
+								
+							 
+
+						</h:column>
+
+						
+					</h:dataTable>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{registarAvariasBean.painelGroup2==true}">
+<div class="form-group">
+						<h:outputLabel value="Estimado Cliente:"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputText value="#{registarAvariasBean.clienteSelecionado.nome}"
+							disabled="true"	styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+
+<div class="form-group">
+					<label class="col-sm-3 control-label">Tipo de Avaria</label>
+					<div class="col-sm-4">
+
+								<h:selectOneMenu
+							value="#{registarAvariasBean.avaria.tipoDeAvaria}" 
+							converter="tipoAvariaConverter"
+							styleClass="form-control" required="true"
+							requiredMessage="O campo provincia é obrigatório">
+							<f:selectItem itemLabel="::Selecione::" itemValue="null" />
+							<f:selectItems value="#{registarAvariasBean.tipoDeAvarias}" var="tipo"
+								itemLabel="#{tipo.descricao}" itemValue="#{tipoDeAvaria}" />							
+						</h:selectOneMenu>
+							</div>
+					
+					</div>
+					
+					
+				<div class="form-group">
+						<h:outputLabel value="Detalhes"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputTextarea value="#{registarAvariasBean.avaria.detalhes}"
+								styleClass="form-control">
+							<f:passThroughAttribute name="placeholder" value="Insira os detalhes (Opcional)" />
+							</h:inputTextarea>
+						</div>
+					</div>
+					
+					
+					<div class="row" style="text-align: center; margin-left: 2%;margin-top:1%;">
+
+						<h:commandLink styleClass="btn btn-success"
+							actionListener="#{registarAvariasBean.salvar}" value="Guardar" />
+						<h:commandButton styleClass="btn btn-primary"
+							action="#{registarAvariasBean.iniciarBean}" style="margin-left:1%;"
+							immediate="true" value="Voltar" />
+					</div>
+					
+					
+</h:panelGroup>
+
+					
+						
+</div>
+</div>
+
+</h:form>
+</div>
+	</ui:define>
+</ui:composition>
+</html>

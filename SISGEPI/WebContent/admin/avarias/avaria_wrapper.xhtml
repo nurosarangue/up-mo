@@ -1,0 +1,21 @@
+<ui:composition
+   template="/pages/layout/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+ 
+    <ui:define name="title">Avarias</ui:define>
+    
+    <ui:define name="principal">
+       <h:form id="avaria_form">
+         <p:growl/>
+         
+	          <ui:include src="/pages/avarias/avaria_lista.xhtml"/>
+	          <ui:include src="/pages/avarias/Resisto_Avaria.xhtml"/>
+	   </h:form>     
+     
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+          <pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.3" 
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                         xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.3
+               http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
+               
+              <url-mapping >
+               <pattern value="/login.jsf" />
+               <view-id value="/login/login.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciarBean}</action>
+               </url-mapping> 
+               
+               <url-mapping id="avariaaccordion">
+               <pattern value="/avaria/accordion/" />
+               <view-id value="/avaria_accordion.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciarBean}</action>
+               </url-mapping>  
+               
+               <url-mapping id="avariamanutencao">
+               <pattern value="/avaria/manutencao/" />
+               <view-id value="/pages/avarias/avaria_wrapper.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciarBean}</action>
+               </url-mapping> 
+               
+               <url-mapping id="clientemanutencao">
+               <pattern value="/cliente/manutencao/" />
+               <view-id value="/pages/clientes/cliente_wrapper.jsf"/>
+               <action onPostback="false">#{clienteBean.iniciarBean}</action>
+               </url-mapping>
+               
+               <url-mapping id="cidademanutencao">
+               <pattern value="/cidade/manutencao/" />
+               <view-id value="/pages/cidades/cadastro_cidades.jsf"/>
+               <action onPostback="false">#{cidadeBean.iniciarBean}</action>
+               </url-mapping>
+               
+              
+              <url-mapping id="unidademanutencao">
+               <pattern value="/unidade/monutencao/" />
+               <view-id value="/pages/cidades/cadastro_unidades.jsf"/>
+               <action onPostback="false">#{unidadeBean.iniciarBean}</action>
+               </url-mapping>
+               
+               <url-mapping id="reparacaomanutencao">
+               <pattern value="/reparacao/monutencao/" />
+               <view-id value="/pages/cidades/cadastro_avarias.jsf"/>
+               <action onPostback="false">#{reparacaoBean.iniciarBean}</action>
+               </url-mapping>
+               
+               <url-mapping id="bairomanutencao">
+               <pattern value="/bairo/monutencao/" />
+               <view-id value="/pages/bairos/bairo_wrapper.jsf"/>
+               <action onPostback="false">#{bairoBean.iniciarBean}</action>
+               </url-mapping>
+          
+               <url-mapping id="avenidamanutencao">
+               <pattern value="/avenida/monutencao/" />
+               <view-id value="/pages/avenidas/avenida_wrapper.jsf"/>
+               <action onPostback="false">#{bairoBean.iniciarBean}</action>
+               </url-mapping>
+               
+              <url-mapping id="usuariofuncionario">
+               <pattern value="/usuariofuncionario/manutencao/" />
+               <view-id value="/pages/usuarios/funcionarios/usuario_funcionario_wrapper.jsf"/>
+               <action onPostback="false">#{usuarioFuncionarioBean.iniciarBean}</action>
+               </url-mapping> 
+               
+               <url-mapping id="equipemonutencao">
+               <pattern value="/equipe/monutencao/" />
+               <view-id value="/pages/equipes/equipe_wrapper.jsf"/>
+               <action onPostback="false">#{equipeBean.iniciarBean}</action>
+               </url-mapping> 
+               
+               
+              <!--  <url-mapping id="equipedragdrop">
+               <pattern value="/equipe/dragdrop/" />
+               <view-id value="/pages/equipes/equipe_drag_drop.jsf"/>
+               <action onPostback="false">#{equipeBean.iniciarBean}</action>
+               </url-mapping> -->
+               
+             <!--   <url-mapping id="equipedragdrop">
+               <pattern value="/equipe/dragdrop/" />
+               <view-id value="/pages/equipes/equipe_drag_drop.jsf"/>
+               <action onPostback="false">#{equipeDragdropBean.iniciarBean}</action>
+               </url-mapping> -->
+               
+              <!--  
+                <url-mapping id="experiencia">
+               <pattern value="/experiencia/manutencao/" />
+               <view-id value="/pages/Experiencias/experiencia.jsf"/>
+               <action onPostback="false">#{clienteBean.iniciarBean}</action>
+               </url-mapping> 
+               
+                <url-mapping id="tecnicomanutencao">
+               <pattern value="/tecnico/manutencao/" />
+               <view-id value="/pages/equipes/equipe_wrapper.jsf"/>
+               <action onPostback="false">#{equipeBean.iniciarBean}</action>
+               </url-mapping> 
+                -->
+                
+               <url-mapping>
+               <pattern value="/cliente/avarias.jsf" />
+               <view-id value="/cliente/index.jsf"/>
+               <action onPostback="false">#{registarAvariasBean.iniciarBean}</action>
+               </url-mapping>
+               
+               <url-mapping>
+               <pattern value="/admin/cliente.jsf" />
+               <view-id value="/admin/clientes/cadastro.jsf"/>
+               <action onPostback="false">#{clienteBean.iniciar}</action>
+               </url-mapping>
+               
+               <url-mapping>
+               <pattern value="/admin/index.jsf" />
+               <view-id value="/admin/index.jsf"/>               
+               </url-mapping>
+               
+               <url-mapping>
+               <pattern value="/operador/index.jsf" />
+               <view-id value="/recepcionista/index.jsf"/>               
+               </url-mapping>
+               
+               <url-mapping>
+               <pattern value="/operador/avarias.jsf" />
+               <view-id value="/recepcionista/avarias/cadastro.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciar}</action>
+               </url-mapping>
+               
+                <url-mapping>
+               <pattern value="/operador/avariasResolvidas.jsf" />
+               <view-id value="/recepcionista/avarias/avariasBaixadas.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciar}</action>
+               </url-mapping>
+               
+               
+               <url-mapping>
+               <pattern value="/admin/avarias.jsf" />
+               <view-id value="/admin/avarias/cadastro.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciar}</action>
+               </url-mapping>
+               <url-mapping>
+               <pattern value="/admin/avariasResolvidas.jsf" />
+               <view-id value="/admin/avarias/avariasBaixadas.jsf"/>
+               <action onPostback="false">#{avariaBean.iniciar}</action>
+               </url-mapping>
+               
+               
+                <url-mapping>
+               <pattern value="/operador/cliente.jsf" />
+               <view-id value="/recepcionista/clientes/cadastro.jsf"/>
+               <action onPostback="false">#{clienteBean.iniciarOperadorBean}</action>
+               </url-mapping>
+               
+                <url-mapping>
+               <pattern value="/admin/funcionario.jsf" />
+               <view-id value="/admin/Funcionario/cadastro.jsf"/>
+               <action onPostback="false">#{funcionarioBean.iniciarBean}</action>
+               </url-mapping>
+               
+               
+        </pretty-config>

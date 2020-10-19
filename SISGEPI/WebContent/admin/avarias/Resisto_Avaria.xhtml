@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+    
+        
+        <p:panel header="Resisto de Grao de Instrução" rendered="#{avariaBean.avaria != null}"
+                 id="lista-avaria-panel">
+             <p:panelGrid columns="4">
+             
+                <h:outputLabel value="Grao de Instrução"/>
+                <p:inputText value="#{avariaBean.avaria.nome}" />
+            
+               <h:outputLabel value="Data de Participação"/>
+               <p:calendar value="#{avariaBean.avaria.dataCriacao}"
+               pattern="dd/MM/yyy" maxdate="#{avariaBean.dataActual}"/>
+             </p:panelGrid>
+             <br/>
+             <p:commandButton icon="salvar-icon" value="Salvar" style="color:green;" action="#{avariaBean.salvar}"
+             update="@form" id="btn-salvar"/>
+             
+             <p:commandButton icon="voltar-icon" value="Voltar" action="#{avariaBean.voltar}" update="@form"
+             immediate="true"/>
+             
+        </p:panel>
+        <p:blockUI block="lista-avaria-panel" trigger="btn-salvar"/>
+
+  
+</html>
+

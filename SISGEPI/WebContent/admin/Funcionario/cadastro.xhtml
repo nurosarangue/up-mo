@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/admin/principal/index.xhtml">
+	<ui:define name="titulo">
+	Registar Cliente
+	</ui:define>
+	<ui:define name="menu">
+	
+	   <ui:include src="/admin/template/menu.xhtml"></ui:include>
+	   
+	</ui:define>
+	
+	<ui:define name="usuarioLogado">
+	   <ui:include src="/admin/template/usuario_logado.xhtml"></ui:include>
+	</ui:define>
+	
+	<ui:define name="corpo">
+	<div class="x_panel">
+	<h:form id="form" styleClass="form-horizontal">
+	<p:messages closable="true" id="mensagem"/>	 
+<div class="panel panel-info ">
+<div class="panel-body">
+	
+	<h:panelGroup styleClass="sublinhar fw-700" style="float: right;">
+			<h:commandLink title="Novo registo" styleClass="btn btn-success"
+				actionListener="#{funcionarioBean.novoFuncionario}" immediate="true"
+				rendered="#{funcionarioBean.cadastroBoolean==false}">
+				<span class="fa fa-plus"
+				style="font-size: 15px; font-weight: bold;"> Novo Funcionario</span>
+			</h:commandLink>
+			<h:commandLink styleClass="btn btn-success"
+				title="Voltar à Pesquisa"
+				actionListener="#{funcionarioBean.iniciarBean}" immediate="true"
+				rendered="#{funcionarioBean.cadastroBoolean !=false}">
+				<span class="fa fa-history"
+				style="font-size: 15px; font-weight: bold;"> Voltar à
+				pesquisa</span>
+			</h:commandLink>
+				</h:panelGroup>
+				
+		
+		<h:panelGroup rendered="#{funcionarioBean.cadastroBoolean==false}">
+
+					<div class="form-group">
+
+						<div class="col-sm-6">
+							<div class="input-group">
+								<h:inputText styleClass="form-control"
+									value="#{funcionarioBean.pesquisa}">
+									<f:passThroughAttribute name="placeholder"
+										value="Pesquisa por nome ou email ou codigo do funcionario" />
+									<f:passThroughAttribute name="autofocus" value="true" />
+									
+									<p:ajax event="keyup" listener="#{funcionarioBean.pesquisar}"
+										update="tabela"></p:ajax>
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandLink
+										styleClass="btn btn-success" action="#{funcionarioBean.pesquisar}"
+										value="Pesquisar" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<h:dataTable value="#{funcionarioBean.funcionarios}" var="funcionario" id="tabela"
+						styleClass="table table-bordered table-hover"
+						headerClass="cabecalho-T" footerClass="rodape-T">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#" />
+							</f:facet>
+							<h:outputText value="#{funcionario.id}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Nome do funcionario" />
+							</f:facet>
+							<h:outputText value="#{funcionario.nome}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Código de Acesso" />
+							</f:facet>
+							<h:outputText value="#{funcionario.numeroFuncionario}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Opções" />
+							</f:facet>
+											
+							
+								<h:commandLink title="Editar?" immediate="true"
+									actionListener="#{funcionarioBean.editar(funcionario)}" styleClass="tooltip-left"
+									style="margin-left:1%; color: blue;">
+									<span class="fa fa-pencil"
+										></span>
+								</h:commandLink>
+								<h:commandLink immediate="true" title="Excluir?"
+									styleClass="tooltip-left" id="id-excluir"
+									style="color: red; margin-left:1%;">
+									<span class="fa fa-remove"
+										></span>
+									<p:ajax event="click"
+										listener="#{funcionarioBean.prepararExclusao(funcionario)}"
+										update="form:id-panelGroup-confirma-modal-exclusao" />
+									<f:passThroughAttribute name="data-toggle" value="modal" />
+									<f:passThroughAttribute name="data-target" value="#modalExclusao" />
+								</h:commandLink>
+								
+								<h:commandLink immediate="true" title="Imprimir"
+								actionListener="#{funcionarioBean.imprimirDadosFuncionario(funcionario)}"
+								style="color: blue; margin-left:1%;">
+								<span class="fa fa-print" style="font-size: 150%"></span>
+								</h:commandLink>
+							 
+
+						</h:column>
+
+						<f:facet name="footer">
+							<h:outputText
+								value=" #{funcionarioBean.quantidadeRegistos} registo(s) encontrado(s)"></h:outputText>
+						</f:facet>
+					</h:dataTable>
+				</h:panelGroup>
+				
+				
+				<!-- Novo cadastro (e edicao) do cliente  -->
+				
+						<h:panelGroup rendered="#{funcionarioBean.novoCadastroBoolean==true}">
+
+
+
+					<div class="form-group">
+						<h:outputLabel value="Nome"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-5">
+							<h:inputText value="#{funcionarioBean.funcionario.nome}" required="true"
+							requiredMessage="O campo do nome não pode ser vazio"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+					<label class="col-sm-3 control-label">Data de Nascimento</label>
+					<div class="col-sm-5">
+<h:inputText id="dataNascimento" value="#{funcionarioBean.funcionario.dataNascimento}"
+							required="true" requiredMessage="O campo de data não pode ser vazio"
+								class="form-control">
+								<f:passThroughAttribute name="data-provide" value="datepicker" />
+								<f:passThroughAttribute name="data-date-format"
+									value="dd/mm/yyyy" />
+								<f:passThroughAttribute name="data-date-language" value="pt-PT" />
+								<f:passThroughAttribute name="data-date-autoclose" value="true" />
+								<f:passThroughAttribute name="data-date-today-highlight"
+									value="true" />
+								<f:passThroughAttribute name="data-date-orientation"
+									value="bottom" />
+								<f:passThroughAttribute name="placeholder" value="DD/MM/AAAA" />
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date"
+									timeZone="Africa/Harare" />
+							</h:inputText>
+							<h:message style="color:red;" for="dataNascimento"></h:message>
+						
+						
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<h:outputLabel styleClass="col-sm-3 control-label" value="Sexo:" />
+								<div class="col-sm-3">
+									<h:selectOneRadio styleClass="form-check"
+										value="#{funcionarioBean.funcionario.sexo}">
+										<f:selectItem itemLabel="Masculino" itemValue="true" />
+										<f:selectItem itemLabel="Feminino" itemValue="false" />
+									</h:selectOneRadio>
+								</div>
+
+							</div>	
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Correio Electronico</label>
+					<div class="col-sm-5">
+						<h:inputText styleClass="form-control" 
+						value="#{funcionarioBean.funcionario.email}"/>
+						
+					</div>
+				</div>
+				
+				<h:panelGroup id="permissao">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Permissão:</label>
+						<div class="col-sm-8">
+							<div class="col-sm-5">
+								<h:inputText disabled="true" styleClass="form-control"
+									value="#{funcionarioBean.permissaoSelecionada.titulo}" />
+							</div>
+							<h:commandLink>
+								<span class="fa fa-plus"></span>
+								<p:ajax event="click"
+								listener="#{funcionarioBean.listarPermissoes}"
+								 update="form:id-panelGroup-confirma-modal"></p:ajax>
+								<f:passThroughAttribute name="data-toggle" value="modal" />
+								<f:passThroughAttribute name="data-target" value="#myModal" />
+							</h:commandLink>
+						</div>
+					</div>
+				</h:panelGroup>
+				
+				
+					<div class="row" style="text-align: center; margin-left: 2%;margin-top:1%;">
+
+						<h:commandButton styleClass="btn btn-success"
+							action="#{funcionarioBean.salvar}" value="Guardar" />
+						<h:commandButton styleClass="btn btn-primary"
+							action="#{funcionarioBean.iniciarBean}" style="margin-left:1%;"
+							immediate="true" value="Voltar" />
+					</div>
+				
+				</h:panelGroup>
+		
+		
+	</div></div>
+	
+	<!-- Modal -->
+			<div class="modal default" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				style="padding-top: 210px;">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&#10006;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								<h:outputLabel value="Por favor selecione uma permissão" />
+							</h4>
+
+						</div>
+						<div class="modal-body">
+							<h:panelGroup id="id-panelGroup-confirma-modal">
+								<h:outputText value="Por favor selecione uma permissão" />
+								<span class="fa fa-plus"></span>
+								<p>
+									
+									<p:spacer />
+									<p:spacer />
+									
+									<h:dataTable value="#{funcionarioBean.permissaos}"
+										var="permissao" id="tabela-CR"
+										styleClass="table table-bordered table-hover"
+										headerClass="cabecalho-T" footerClass="rodape-T">
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#" />
+											</f:facet>
+											<h:outputText value="#{permissao.id}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Titulo" />
+											</f:facet>
+											<h:outputText value="#{permissao.titulo}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Opções" />
+											</f:facet>
+											<h:commandLink immediate="true" title="Excluir?"
+												styleClass="tooltip-left"
+												style="color: blue; margin-left:1%;">
+												<span class="fa fa-plus"></span>
+												<p:ajax event="click"
+													listener="#{funcionarioBean.selecionarPermissao(permissao)}"
+													update="form:permissao"></p:ajax>
+												<f:passThroughAttribute name="data-dismiss" value="modal" />
+											</h:commandLink>
+										</h:column>
+										
+									</h:dataTable>
+
+
+
+								</p>
+							</h:panelGroup>
+						</div>
+						<div class="modal-footer">
+							<h:commandButton type="button" title="Close?"
+								class="btn btn-primary" value="Fechar">
+								<f:passThroughAttribute name="data-dismiss" value="modal" />
+							</h:commandButton>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Modal -->
+			
+			
+			
+			
+				
+			<!-- Modal -->
+				<div class="modal default" id="modalExclusao" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" data-backdrop="static"
+					style="padding-top: 210px;">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&#10006;</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">
+									<h:outputLabel value="Você Tem certeza?" />
+								</h4>
+
+							</div>
+							<div class="modal-body">
+								<h:panelGroup id="id-panelGroup-confirma-modal-exclusao">
+									<h:outputText value="Caro Admin! Nao e possivel excluir o funcionario Seleccionado" />
+									<p>
+										<h:outputLabel value="Com o nome: " />
+										<p:spacer />
+										<p:spacer />
+										<h:outputLabel
+											value="  #{funcionarioBean.funcionarioSelecionado.nome}"
+											style="font-weight: 600;" />									
+									</p>
+									<p>
+									<h:outputText value="Porque esta vinculado com outros servicos" />
+									</p>
+								</h:panelGroup>
+							</div>
+							<div class="modal-footer">
+								<h:commandButton type="button" title="Close?"
+									class="btn btn-primary" value="Fechar">
+									<f:passThroughAttribute name="data-dismiss" value="modal" />
+								</h:commandButton>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Modal -->
+	
+	
+	</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+</html>

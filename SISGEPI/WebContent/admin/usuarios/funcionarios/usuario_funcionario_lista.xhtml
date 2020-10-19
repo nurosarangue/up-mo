@@ -1,0 +1,55 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Lista de Usuarios" style="width:100%;" 
+                 rendered="#{usuarioFuncionarioBean.usuarioFuncionario == null}">
+        
+               <p:commandButton icon="fa fa-plus" value="Novo Usuario" style="color:green;" 
+            action="#{usuarioFuncionarioBean.novoUsuarioFuncionario}"
+                             update="usuario_funcionario_form"/>
+              <br/>
+              <br/>
+                            
+            <p:dataTable value="#{usuarioFuncionarioBean.usuariosFuncionario}" var="usuario"
+               style="width:70%"  paginator="true" rows="5" rowsPerPageTemplate="5, 15, 25"
+	        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                        {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+              
+                <p:column headerText="Nome">
+                  <h:outputText value="#{usuario.nome}"/>
+                </p:column>
+                
+                 <p:column headerText="Login">
+                  <h:outputText value="#{usuario.login}"/>
+                </p:column>
+                
+                 <p:column headerText="Email">
+                  <h:outputText value="#{usuario.email}"/>
+                </p:column>
+               
+                <p:column headerText="Grao de Instrução">
+                  <h:outputText value="#{usuario.grauIntrucao}"/>
+                </p:column>
+       
+                <p:column headerText="Activo" width="60">
+				<h:outputText value="#{usuario.activo ? 'Sim' : 'Não'}"/>
+				</p:column>
+				
+			    <p:column width="50">
+			       <p:commandButton icon="editar-icon" action="#{usuarioFuncionarioBean.editar(usuario)}"
+			            update="usuario_funcionario_form"/>
+			    </p:column>
+             
+                
+            </p:dataTable>
+   
+        </p:panel>
+  
+</html>

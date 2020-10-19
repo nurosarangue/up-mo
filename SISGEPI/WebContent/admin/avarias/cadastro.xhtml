@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/admin/principal/index.xhtml">
+	<ui:define name="titulo">
+	Avarias
+	</ui:define>
+	<ui:define name="menu">
+	
+	   <ui:include src="/admin/template/menu.xhtml"></ui:include>
+	   
+	</ui:define>
+	
+	<ui:define name="usuarioLogado">
+	   <ui:include src="/admin/template/usuario_logado.xhtml"></ui:include>
+	</ui:define>
+	
+	<ui:define name="corpo">
+	<div class="x_panel">
+	<h:form id="form" styleClass="form-horizontal">
+	<p:messages closable="true" id="mensagem"/>	 
+<div class="panel panel-info ">
+<div class="panel-body">
+	
+	
+				
+		
+		<h:panelGroup rendered="#{avariaBean.pesquisaBoolean==false}">
+					<div class="form-group">
+						<div class="col-sm-6">
+							<div class="input-group">
+								<h:inputText styleClass="form-control"
+									value="#{avariaBean.pesquisa}">
+									<f:passThroughAttribute name="placeholder"
+										value="Pesquisa por nome do cliente ou numero do contador ou telefone" />
+									<f:passThroughAttribute name="autofocus" value="true" />
+									
+									<p:ajax event="keyup" listener="#{avariaBean.pesquisarAvaria}"
+										update="tabela"></p:ajax>
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandLink
+										styleClass="btn btn-success" action="#{avariaBean.pesquisarAvaria}"
+										value="Pesquisar" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<h:dataTable value="#{avariaBean.avarias}" var="avaria" id="tabela"
+						styleClass="table table-striped table-bordered bulk_action"
+						headerClass="cabecalho-T" footerClass="rodape-T">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="#" />
+							</f:facet>
+							<h:outputText value="#{avaria.id}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Nome do cliente" />
+							</f:facet>
+							<h:outputText value="#{avaria.cliente.nome}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Data Registo" />
+							</f:facet>
+							<h:outputText value="#{avaria.dataCadastro}" >
+					<f:convertDateTime pattern="dd-MM-yyyy" ></f:convertDateTime>
+							</h:outputText>
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo de Avaria" />
+							</f:facet>
+							<h:outputText value="#{avaria.tipoDeAvaria.descricao}" />
+						</h:column>
+						
+						<h:column rendered="#{avaria.detalhes!=null}">
+							<f:facet name="header">
+								<h:outputText value="Info. Adicionais" 
+								rendered="#{avaria.detalhes!=null}"/>
+							</f:facet>
+							<h:outputText value="#{avaria.detalhes}" 
+							rendered="#{avaria.detalhes!=null}" />
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Opções" />
+							</f:facet>
+								<h:commandLink  immediate="true" title="Abrir"
+									styleClass="tooltip-left" id="id-excluir"
+									actionListener="#{avariaBean.visualizarDetalhesAvaria(avaria)}"
+									style="color: red; margin-left:1%;">
+									<span class="fa fa-open"
+										></span>
+									
+									
+								</h:commandLink>
+								
+								<h:commandLink immediate="true" title="Imprimir"
+								actionListener="#{avariaBean.imprimirDadosAvaria(avaria)}"
+								style="color: blue; margin-left:1%;">
+								<span class="fa fa-print" style="font-size: 150%"></span>
+								</h:commandLink>
+							 
+
+						</h:column>
+
+						<f:facet name="footer">
+							<h:outputText
+								value=" #{avariaBean.quantidaderegistos} registo(s) encontrado(s)"></h:outputText>
+						</f:facet>
+					</h:dataTable>
+				</h:panelGroup>
+				
+				
+				<!-- Novo cadastro (e edicao) do cliente  -->
+				
+						<h:panelGroup rendered="#{avariaBean.pesquisaBoolean==true}">
+
+
+
+					<div class="form-group">
+						<h:outputLabel value="Nome do Cliente"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputText value="#{avariaBean.avaria.cliente.nome}" disabled="true" styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					<div class="form-group">
+						<h:outputLabel value="N. Contador"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputText value="#{avariaBean.avaria.cliente.contador}" disabled="true"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					
+						<div class="form-group">
+						<h:outputLabel value="Tipo de Avaria"
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputText value="#{avariaBean.avaria.tipoDeAvaria.descricao}" disabled="true"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<h:outputLabel value="Tell/Cel."
+							styleClass="col-sm-3 control-label" />
+						<div class="col-sm-4">
+							<h:inputText value="#{avariaBean.avaria.cliente.telefone}" disabled="true"
+								styleClass="form-control">
+							</h:inputText>
+						</div>
+					</div>
+
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Detalhes da Avaria</label>
+					<div class="col-sm-4">
+                 <h:inputText value="#{avariaBean.avaria.detalhes}" disabled="true"
+								styleClass="form-control">
+							</h:inputText>
+						
+					</div>
+				</div>	
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Data de Registo</label>
+					<div class="col-sm-4">
+                 <h:inputText value="#{avariaBean.avaria.dataCadastro}" disabled="true"
+								styleClass="form-control">
+								<f:convertDateTime pattern="yyyy-MM-dd" ></f:convertDateTime>
+							</h:inputText>
+						
+					</div>
+				</div>			
+					
+					<div class="row" style="text-align: center; margin-left: 2%;margin-top:1%;">
+
+						<h:commandButton styleClass="btn btn-primary"
+							action="#{avariaBean.voltarPesquisa}" style="margin-left:1%;"
+							immediate="true" value="Voltar" />
+					</div>
+				
+				</h:panelGroup>
+		
+		
+	</div></div>
+	</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Lista de Avarias participadas" style="width:100%;" 
+                 rendered="#{clienteBean.cliente  == null}">
+        
+            <p:commandButton icon="adicionar-icon" value="Novo Resisto" style="color:green;" 
+            action="#{clienteBean.novoCliente}"
+                             update="@form"/>
+            <br/><br/>
+
+	<p:panelGrid columns="2">
+		<h:outputText value="Cliente:" />
+		<p:selectOneMenu value="#{clienteBean.parametros.cliente}"
+			style="width:160px;" converter="clienteConverter" filter="true" 
+			  filterMatchMode="contains">
+			<f:selectItem itemLabel="::Selecione::" itemValue="#{null}" />
+			<f:selectItems value="#{clienteBean.clientes}" var="cliente"
+				itemLabel="#{cliente.nome}" itemValue="#{cliente}" />
+		</p:selectOneMenu>
+		<h:outputText value="Bairos" />
+		<p:selectCheckboxMenu label="Bairos"
+			value="#{clienteBean.parametros.bairos}" converter="bairoConverter"
+			filter="true" filterMatchMode="contains">
+			<f:selectItems value="#{clienteBean.bairos}" var="bairo"
+				itemLabel="#{bairo.nome}" />
+		</p:selectCheckboxMenu>
+		    <h:outputText value="Data:" />
+		    <h:panelGroup>
+		      <h:outputText value="De:" />
+		       <p:calendar value="#{clienteBean.parametros.dataParticipacao}" size="8"/>
+		       <h:outputText value="Ate:" />
+		       <p:calendar value="#{clienteBean.parametros.dataResolucao}" size="8"/>
+		  </h:panelGroup>
+	   </p:panelGrid>
+	   <p:commandButton value="Pesquisar" icon="fa fa-search" action="#{clienteBean.pesquisar}"
+	      update="tab-clientes"/>
+<br/><br/>
+	<p:dataTable id="tab-clientes" value="#{clienteBean.clientes}" var="cliente"
+            paginator="true" rows="5" rowsPerPageTemplate="5, 15, 25"
+	        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                        {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                
+                
+                <p:column headerText="Porta" style="width:20px;">
+                     <h:outputText value="#{cliente.id}"/>
+                </p:column>
+                
+                <p:column headerText="Nome" filterBy="#{cliente.nome}"
+                  filterMatchMode="contains" style="width:120px;">
+                     <h:outputText value="#{cliente.nome}"/>
+                </p:column>
+                
+                <p:column headerText="Numero de Contador" style="width:60px;">
+                     <h:outputText value="#{cliente.contador}"/>
+                </p:column>
+                
+                <p:column headerText="Contacto" style="width:60px;">
+                     <h:outputText value="#{cliente.telefone}"/>
+                </p:column>
+                
+                                
+                 <p:column headerText="Referencia" style="width:80px;">
+                     <h:outputText value="#{cliente.referencia}"/>
+                </p:column>
+                
+                <p:column headerText="Provincia" style="width:50px;">
+                     <h:outputText value="#{cliente.endereco.cidade.estado.label}"/>
+                </p:column>
+                
+                <p:column headerText="Delegação" style="width:90px;">
+                     <h:outputText value="#{cliente.endereco.cidade.nome}"/>
+                </p:column>
+                
+                 <p:column headerText="Zona" style="width:90px;">
+                     <h:outputText value="#{cliente.localizacao.unidade.zona.label}"/>
+                </p:column>
+                
+                 <p:column headerText="Unidade" style="width:50px;">
+                     <h:outputText value="#{cliente.localizacao.unidade.nome}"/>
+                </p:column>
+                
+                <p:column headerText="Bairo" style="width:50px;">
+                     <h:outputText value="#{cliente.bairo.nome}"/>
+                </p:column>
+              
+                <p:column headerText="Avenida" style="width:50px;">
+                     <h:outputText value="#{cliente.avenida.nome}"/>
+                </p:column>
+              
+                 <p:column headerText="Residência" style="width:50px;">
+                     <h:outputText value="#{cliente.manutencao.reparacao.instalacao.label}"/>
+                </p:column>               
+                
+                 <p:column headerText="Instalação" style="width:50px;">
+                     <h:outputText value="#{cliente.manutencao.reparacao.instalacao.label}"/>
+                </p:column>
+                
+                <p:column headerText="Data" style="width:50px;">
+                     <h:outputText value="#{cliente.dataParticipar}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                     </h:outputText>
+                </p:column>
+                
+                <p:column headerText="Resolvida" style="width:50px;">
+                     <h:outputText value="#{cliente.participo}"/>
+                </p:column>
+                
+                <p:column headerText="Nao Resolvida" style="width:50px;">
+                     <h:outputText value="#{cliente.participo}"/>
+                </p:column>
+           </p:dataTable>
+        </p:panel>
+  
+</html>

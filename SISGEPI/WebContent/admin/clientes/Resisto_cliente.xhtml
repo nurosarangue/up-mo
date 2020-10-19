@@ -1,0 +1,139 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Participar Avaria" rendered="#{clienteBean.cliente != null}">
+           
+           <p:panel header="Dados do Clientes">
+            <p:panelGrid columns="4">
+           <ui:remove>
+              <h:outputText value="Imagem"/>
+              <p:fileUpload fileUploadListener="#{clienteBean.enviarFoto}" 
+				auto="true" update="imagem-previa texto-previa"
+				   label="Selecione Imagem" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+				 invalidFileMessage="Formato de arquivo inválido" multiple="false"
+				 sizeLimit="1000000" invalidSizeMessage="Tamanho de arquivo inválido"
+				 	dragDropSupport="true" mode="advanced"/>
+				
+			<h:panelGroup id="texto-previa">
+			    <h:outputText value="Previa" rendered="#{clienteBean.cliente.foto}"/>
+			</h:panelGroup>
+			<h:panelGroup  id="imagem-previa">
+			  <p:graphicImage value="#{clienteBean.cliente.imagem}" cache="false"
+			    style="width:100px; height:100px;" rendered="#{clienteBean.cliente.foto  != null}}"
+			    />
+              </h:panelGroup>
+           </ui:remove>
+              <h:outputText value="Nome do Cliente: "/>
+               <p:inputText value="#{clienteBean.cliente.nome}"/>
+               
+               <h:outputText value="Numero de Contador: "/>
+               <p:inputMask value="#{clienteBean.cliente.contador}" mask="999999999"/>
+               
+               <h:outputText value="Descricao do Clientes: "/>
+               <p:inputTextarea value="#{clienteBean.cliente.referencia}"/>
+               
+               
+               
+               <h:outputText value="Numero de Telefone: "/>
+               <p:inputMask value="#{clienteBean.cliente.telefone}" mask="999999999"/>
+               
+               <h:outputText value="Data de Participacao: "/>
+               <p:calendar value="#{clienteBean.cliente.dataParticipar}"
+                           pattern="dd/MM/yyyy"/>
+                              
+             </p:panelGrid>
+             </p:panel>
+             
+             <p:panel header="Dados da localização">
+              <p:panelGrid columns="4">
+              
+              
+              <h:outputText value="Provincia:"/>
+             <p:selectOneMenu value="#{clienteBean.cliente.endereco.cidade.estado}"  
+             style="width:160px;">
+                  <f:selectItem itemLabel="::Selecione::" itemValue="null"/>
+                  <f:selectItems value="#{clienteBean.estados}" var="estado"
+                      itemLabel="#{estado.label}" itemValue="#{estado}"/>
+               <p:ajax event="change" update="combo-cidades"/>
+             </p:selectOneMenu>
+             
+             <h:outputText value="Delegação:"/>
+             <p:selectOneMenu id="combo-cidades" value="#{clienteBean.cliente.endereco.cidade}"
+                disabled="#{clienteBean.cliente.endereco.cidade.estado == null}"
+                converter="cidadeEntityCoverter">
+                 <f:selectItem itemLabel="::Selecione::" itemValue="null"/>
+                 <f:selectItems value="#{clienteBean.cidadesdoEstado}" var="cidade"
+                     itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
+             </p:selectOneMenu>
+
+             <h:outputText value="Zona de Distribuição:"/>
+             <p:selectOneMenu value="#{clienteBean.cliente.localizacao.unidade.zona}"  style="width:160px;">
+                <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                <f:selectItems value="#{clienteBean.zonas}" var="zona"
+                      itemLabel="#{zona.label}" itemValue="#{zona}"/>
+                <p:ajax event="change" update="combo-unidades"/>
+              </p:selectOneMenu>
+              
+              <h:outputText value="Unidade de Distribuição:"/>
+              <p:selectOneMenu id="combo-unidades" value="#{clienteBean.cliente.localizacao.unidade}"
+                 disabled="#{clienteBean.cliente.localizacao.unidade.zona == null}"
+                 converter="unidadeConverter"> 
+                  <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                  <f:selectItems value="#{clienteBean.unidadesDaZona}" var="unidade"
+                    itemLabel="#{unidade.nome}" itemValue="#{unidade}"/>
+               </p:selectOneMenu>  
+
+               <h:outputText value="Tipo de Instalação"/>
+               <p:selectOneMenu value="#{clienteBean.cliente.manutencao.reparacao.instalacao}" style="width:160px;">
+                  <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                  <f:selectItems value="#{clienteBean.instalacoes}" var="instalacao"
+                  itemLabel="#{instalacao.label}" itemValue="#{instalacao}"/>
+                <p:ajax event="change" update="combo-reparacoes"/>
+               </p:selectOneMenu>
+               
+               <h:outputText value="Tipo de Avaria"/>
+               <p:selectOneMenu id="combo-reparacoes" value="#{clienteBean.cliente.manutencao.reparacao}"
+                  disabled="#{clienteBean.cliente.manutencao.reparacao.instalacao == null}"
+                  converter="reparacaoConverter">
+                   <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                   <f:selectItems value="#{clienteBean.reparacoesDaIstalacao}" var="reparacao"
+                  itemLabel="#{reparacao.nome}" itemValue="#{reparacao}"/>
+               </p:selectOneMenu>
+               
+               <h:outputText value="Bairo:"/>
+              <p:selectOneMenu value="#{clienteBean.cliente.bairo}" style="width:160px;"
+                  converter="bairoConverter">
+                  <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                  <f:selectItems value="#{clienteBean.bairos}" var="bairo"
+                  itemLabel="#{bairo.nome}" itemValue="#{bairo}"/> 
+              </p:selectOneMenu>
+      
+      
+               <h:outputText value="Avenida/Rua"/>
+               <p:selectOneMenu id="combo-avenidas" value="#{clienteBean.cliente.avenida}"
+                    converter="avenidaCoverter">
+                   <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+                   <f:selectItems value="#{clienteBean.avenidas}" var="avenida"
+                  itemLabel="#{avenida.nome}" itemValue="#{avenida}"/>
+               </p:selectOneMenu>
+  
+             </p:panelGrid>
+                 
+           </p:panel>
+           <br/>
+           <p:commandButton value="Salvar" icon="salvar-icon" action="#{clienteBean.salvar}" 
+              update="cliente_form"/>
+              
+              <p:commandButton icon="voltar-icon" value="Voltar" immediate="true" update="cliente_form"
+              action="#{clienteBean.voltar}" />
+           
+        </p:panel>
+  
+</html>

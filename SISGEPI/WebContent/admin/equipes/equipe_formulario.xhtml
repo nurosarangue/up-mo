@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<p:panel header="Cadastro de Equipes" rendered="#{equipeBean.equipe != null}">
+		<h:panelGrid columns="2" cellpadding="5">
+		   <h:outputLabel value="Nome:"/>
+		   <h:inputText value="#{equipeBean.equipe.nome}"/>
+		   
+		   <h:outputLabel value="Sigla:"/>
+		   <h:inputText value="#{equipeBean.equipe.sigla}"/>
+		 
+           <h:outputLabel value="Semestre:"/>
+		   <p:selectOneMenu value="#{equipeBean.equipe.semestre}">
+		        <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+		        <f:selectItems value="#{equipeBean.semestres}" var="semestre"
+		           itemLabel="#{semestre.label}" itemValue="#{semestre}"/>
+		   </p:selectOneMenu>
+		   
+		   
+		   <h:outputLabel value="Activo:"/>
+		   <p:selectBooleanCheckbox value="#{equipeBean.equipe.activo}"/>
+		   
+	
+		   <h:outputLabel value="Funcionarios:"/>
+		   <p:selectCheckboxMenu label="Usuarios" value="#{equipeBean.equipe.usuariosFuncionario}"
+		      converter="usuariofuncConverter" filter="true" filterMatchMode="contains">
+		         <f:selectItems value="#{equipeBean.usuariosFuncionario}" var="usuario"
+		            itemLabel="#{usuario.nome} - #{usuario.grauIntrucao}"/>
+		          <p:ajax update="label-equipes"/>
+		   </p:selectCheckboxMenu>
+
+           <h:outputLabel value=""/>
+           <h:outputText id="label-equipes" value="#{equipeBean.labelFuncionarios}" escape="false"/>
+
+		   </h:panelGrid>
+	 	
+		<p:commandButton value="Salvar" icon="salvar-icon" action="#{equipeBean.salvarEquipe}"
+		   update="@form"/>
+		   
+		<p:commandButton value="Cancelar" icon="voltar-icon" action="#{equipeBean.cancelrEqipe}"
+		   update="@form" immediate="true"/>
+		 
+<ui:remove>  
+		<p:commandButton value="Adicionar Horário" icon="adicionar-icon" 
+             action="#{equipeBean.novoHorario}" oncomplete="PF('adicionarHorarioDialog').show()"
+             update="@form"/>
+</ui:remove>            
+          
+          
+          <p:commandButton value="Incluir Horário" icon="adicionar-icon" action="#{equipeBean.incluirHorario}" 
+            update="@form"/>
+            <br/>
+          <br/>
+          <p:dataTable value="#{equipeBean.equipe.horarios}" var="horario" editable="true"
+          	  rowIndexVar="indice" style="width:80%">
+		<p:column headerText="Dia da semona" style="width:30%">
+			<p:selectOneMenu value="#{horario.diaSemana}" style="width:100%">
+				<f:selectItem itemLabel="::Selecione::" itemValue="#{null}" />
+				<f:selectItems value="#{equipeBean.diasSemana}" var="diaSemana"
+					itemLabel="#{diaSemana.label}" itemValue="#{diaSemana}" />
+			</p:selectOneMenu>
+		</p:column>
+
+		<p:column headerText="Hora Inicio" style="width:30%">
+		       <p:calendar value="#{horario.horaInicio}" timeOnly="true"
+                   pattern="HH:mm" stepMinute="5" mask="99:99" showOn="button"/>
+		    </p:column>
+		    
+		    <p:column headerText="Hora Término" style="width:30%">
+			   <p:calendar value="#{horario.horaFim}" timeOnly="true"
+                  pattern="HH:mm" stepMinute="5" mask="99:99" showOn="button"/>
+         
+		    </p:column>
+		    
+		    <p:column style="width:10%">
+		    <p:commandButton value="Excluir" icon="apagar-icon" 
+		      update="@form" oncomplete="PF('confirmarExclusaoHorarioDialog').show()"
+		        action="#{equipeBean.prepararRemocaoHorario(indice)}"/>
+		    </p:column>
+		 </p:dataTable>
+          
+          
+   <ui:remove>
+        <h:outputText value="Horários de Equipe"/>
+		 <p:dataTable value="#{equipeBean.equipe.horarios}" var="horario">
+		 <p:column headerText="Dia da semona">
+		       <h:outputText value="#{horario.diaSemana.label}"/>
+		    </p:column>
+		    
+		    <p:column headerText="Hora Inicio">
+		       <h:outputText value="#{horario.horaInicio}"/>
+		    </p:column>
+		    
+		    <p:column headerText="Hora Término">
+					<h:outputText value="#{horario.horaFim}"/>
+		    </p:column>
+		    <p:column>
+		    <p:commandButton value="Editar" icon="editar-icon" action="#{equipeBean.editarHorario(horario)}"
+		      update="@form" oncomplete="PF('adicionarHorarioDialog').show()"/>
+		    </p:column>
+		    <p:column>
+		    <p:commandButton value="Excluir" icon="apagar-icon" 
+		      update="@form" oncomplete="PF('confirmarExclusaoHorarioDialog').show()">
+		        <f:setPropertyActionListener target="#{equipeBean.horario}" value="#{horario}"/>
+		    </p:commandButton>
+		    </p:column>
+		 </p:dataTable>
+   </ui:remove>  
+		
+	</p:panel>
+	
+	  <p:dialog widgetVar="adicionarHorarioDialog" modal="true" header="Cadastro de Horários">
+        <h:panelGrid columns="2" cellpadding="5">
+         <h:outputLabel value="Dia da Semana"/>
+          <p:selectOneMenu value="#{equipeBean.horario.diaSemana}">
+           <f:selectItem itemLabel="::Selecione::" itemValue="#{null}"/>
+           <f:selectItems value="#{equipeBean.diasSemana}" var="diaSemana"
+               itemLabel="#{diaSemana.label}" itemValue="#{diaSemana}"/>
+          </p:selectOneMenu>
+          
+           <h:outputLabel value="Inico de Horário"/>
+        <p:calendar value="#{equipeBean.horario.horaInicio}" timeOnly="true"
+          pattern="HH:mm" stepMinute="5" mask="99:99" showOn="button"/>
+        
+        <h:outputLabel value="Fim de Horário"/>
+        <p:calendar value="#{equipeBean.horario.horaFim}" timeOnly="true"
+          pattern="HH:mm" stepMinute="5" mask="99:99" showOn="button"/>
+         </h:panelGrid>
+           
+          <p:commandButton value="Salvar" icon="salvar-icon" action="#{equipeBean.salvarHorario}"
+            oncomplete="PF('adicionarHorarioDialog').hide()" update="@form"/>
+          <p:commandButton value="Cancelar" icon="voltar-icon" action="#{equipeBean.limparHorario}"
+			oncomplete="PF('adicionarHorarioDialog').hide" update="@form" immediate="true"/>
+	</p:dialog>
+	
+	<p:confirmDialog message="Deseja realmente excluir este horário?" header="Exclusão de Horário"
+		widgetVar="confirmarExclusaoHorarioDialog">
+		<p:commandButton value="Sim" action="#{equipeBean.removerHorario}" update="@form"
+			oncomplete="PF('confirmarExclusaoHorarioDialog').hide()"/>
+		<p:commandButton value="Não" update="@form"
+			oncomplete="PF('confirmarExclusaoHorarioDialog').hide()" />
+	</p:confirmDialog>
+	
+<ui:remove>
+	<p:confirmDialog message="Deseja realmente Excluir este Horário?" header="Exclusão de Horário"
+	   widgetVar="confirmarExclusaoHorarioDialog">
+	   <p:commandButton value="Sim" action="#{equipeBean.excluirHorario()}" update="@form"
+	      oncomplete="PF('confirmarExclusaoHorarioDialog').hide()"/>
+	    
+	    <p:commandButton value="Não" update="@form"
+	      oncomplete="PF('confirmarExclusaoHorarioDialog').hide()">
+	      <f:setPropertyActionListener target="#{equipeBean.horario}" value="#{null}"/>
+	    </p:commandButton>
+	</p:confirmDialog>
+</ui:remove>
+</html>
+

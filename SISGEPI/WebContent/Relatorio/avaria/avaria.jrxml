@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="avaria" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56f5dcf8-5fd6-4fe4-8c1a-7a6eb3507e8f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="WebContent\Relatorio\connection.xml"/>
+	<parameter name="idCliente" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT sisgepi.tipodeavaria.descricao AS tipoavaria,
+	sisgepi.avaria.detalhes,
+	sisgepi.avaria.`dataCadastro`,
+	sisgepi.cidade.nome AS cidade,
+	sisgepi.cliente.nome AS nomeCliente,
+	sisgepi.cliente.instalacao,
+	sisgepi.cliente.telefone,
+	sisgepi.cliente.avenida,
+	sisgepi.cliente.contador,
+	sisgepi.cliente.bairo
+FROM sisgepi.avaria
+	INNER JOIN sisgepi.cliente ON 
+	 sisgepi.avaria.id_cliente = sisgepi.cliente.id 
+	INNER JOIN sisgepi.cidade ON 
+	 sisgepi.cliente.id_cidade = sisgepi.cidade.id 
+	INNER JOIN sisgepi.tipodeavaria ON 
+	 sisgepi.avaria.`id_tipoAvaria` = sisgepi.tipodeavaria.id 
+WHERE 
+	 sisgepi.cliente.id = $P{idCliente}]]>
+	</queryString>
+	<field name="tipoavaria" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="tipoavaria"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tipodeavaria"/>
+	</field>
+	<field name="detalhes" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="detalhes"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="avaria"/>
+	</field>
+	<field name="dataCadastro" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="dataCadastro"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="avaria"/>
+	</field>
+	<field name="cidade" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="cidade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cidade"/>
+	</field>
+	<field name="nomeCliente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nomeCliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="instalacao" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="instalacao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="telefone" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="telefone"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="avenida" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="avenida"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="contador" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="contador"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="bairo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bairo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="57" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="185" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="3" width="140" height="20" uuid="b9959048-7b51-4f40-be7a-c0da2df5ebf3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="3" width="100" height="21" uuid="c7835292-7bdd-4720-ba86-8ee396bc6d30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome do cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="21" width="77" height="23" uuid="2c20289c-51ac-411a-be71-e37ec832567f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Residencia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="21" width="140" height="23" uuid="0f33f7d0-15b7-4c9c-ada7-0f56a49daf89"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bairo: "+$F{bairo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="3" width="210" height="19" uuid="ab49a655-9c8a-43ae-9106-e728ed2ddfbf"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Instalacao da Residencia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="3" width="100" height="20" uuid="68f28e0a-493f-4603-b572-4b3bbc2c6b6c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{instalacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="41" width="80" height="21" uuid="e36b4afc-beaa-42f4-a25d-f6558ce936b1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tell/Cell.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="41" width="100" height="22" uuid="445bdcc1-a7c7-4bd8-a657-72bf3f4074ce"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="213" y="21" width="167" height="24" uuid="a99192e9-c3cf-4802-9e7e-28ad38f5d3e1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Avenida: "+$F{avenida}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="66" width="546" height="30" uuid="ecd34e85-bb88-4b2c-bf0b-4e6d5795223b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados da Avaria]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="101" y="105" width="149" height="20" uuid="2eacc49b-c4f5-499e-adf6-4550d1f8ec15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoavaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="105" width="100" height="20" uuid="e1c812de-687b-4434-92d8-bd291329e8bd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Avaria:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="351" y="105" width="137" height="20" uuid="12199ab3-3de8-4cea-8e25-53258ffa5b54"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataCadastro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="105" width="100" height="20" uuid="a8d8ccf7-bb11-4eeb-97b6-ab11161c0a63"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de registo:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="61" y="148" width="440" height="30" uuid="ea2632f1-1658-4be7-aeee-264399058bd5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detalhes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ElementGroupBottom" x="4" y="131" width="546" height="17" uuid="ebde4ab9-ef2e-416b-917a-6aeee6e94193"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<text><![CDATA[Descricao dos detalhes da avaria:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="264" y="44" width="100" height="21" uuid="df56b7ab-45f9-483d-b05b-3feafd965ba0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contador}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="184" y="44" width="86" height="21" uuid="bb6e7181-78d7-47fe-9cd6-b4a9503778fe"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N. Contador:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="430" y="23" width="121" height="27" uuid="c6cc56b9-787d-45d9-808e-36d5dd99d094"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="170" y="23" width="260" height="27" uuid="0e02f274-121a-4679-b360-a76bba639319"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<text><![CDATA[Documento processado pelo computador aos:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

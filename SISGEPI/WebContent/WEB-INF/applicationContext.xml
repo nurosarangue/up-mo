@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    
+    
+    <bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">${database.dialect}</prop>
+				<prop key="hibernate.connection.characterEncoding">utf8</prop>
+				<prop key="hibernate.connection.charSet">utf8"</prop>
+			</props>
+		</property>
+	</bean>
+
+<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${database.driverClassName}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+
+	</bean>
+   
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<sec:global-method-security
+		secured-annotations="enabled" />
+		
+	<sec:http pattern="/css/*" security="none"/>
+	<sec:http pattern="/css/**" security="none"/>
+	<sec:http pattern="/fonts/*" security="none"/>
+	<sec:http pattern="/fonts/**" security="none"/>
+	<sec:http pattern="/js/*" security="none"/>
+	<sec:http pattern="/js/**" security="none"/>
+	<sec:http pattern="/resources/imagens/*" security="none"/>
+	<sec:http pattern="/javax.faces.resource/**" security="none"/>
+	<sec:http pattern="/login/login.jsp" security="none"/>
+	
+	<sec:http use-expressions="false">
+	
+		<sec:form-login login-page="/login.jsp"
+			default-target-url="/login.jsp" always-use-default-target="false"
+			authentication-failure-handler-ref="authenticationFailureHandler"
+			authentication-success-handler-ref="authenticationSuccessHandler" />
+		<sec:logout logout-success-url="/login.jsp" />
+		
+		<sec:intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<sec:intercept-url pattern="/recepcionista/**" access="ROLE_RECEP" />
+		<sec:intercept-url pattern="/operador/**" access="ROLE_RECEP" />
+		
+		<sec:logout success-handler-ref="logoutHandler"
+			delete-cookies="SPRING_SECURITY_REMEMBER_ME_COOKIE,JSESSIONID" />
+			<sec:csrf disabled="true" />
+		                        
+	</sec:http>
+	
+	<bean id="logoutHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+		<property name="defaultTargetUrl" value="/login.jsp" />
+    	<property name="redirectStrategy" ref="authenticationFailureRedirectStrategy" />
+	</bean>
+	
+	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/login/failure" />
+    	<property name="redirectStrategy" ref="authenticationFailureRedirectStrategy" />
+	</bean>
+	
+	<bean id="dataSourcePropertiesPlaceHolder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="location" value="classpath:/application.properties" />
+	</bean>
+	
+	<bean id="customAuthenticationProvider"
+		class="edm.piquete.autenticacao.CustomAuthenticationProvider" />
+		
+		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+	    <property name="scopes">
+	        <map>
+	            <entry key="view">
+	                <bean class="edm.piquete.util.ViewScope"/>
+	            </entry>
+	        </map>
+	    </property>
+	</bean>
+
+	<sec:authentication-manager>
+		<sec:authentication-provider ref="customAuthenticationProvider" />
+	</sec:authentication-manager>
+	
+	<context:component-scan base-package="edm.piquete" />
+	<task:annotation-driven/>	
+	<context:annotation-config />
+		
+	
+	<bean id="authenticationSuccessHandler"
+		class="edm.piquete.autenticacao.LoginAuthenticationSuccessHandler">		
+	</bean>	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+</beans>

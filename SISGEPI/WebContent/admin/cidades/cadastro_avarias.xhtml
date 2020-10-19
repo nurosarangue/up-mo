@@ -1,0 +1,123 @@
+<ui:composition
+    template="/pages/layout/template.xhtml"
+   xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+      <ui:define name="Reparação"></ui:define>
+	<ui:define name="Headr">
+	   <meta charset="utf-8"/>
+	</ui:define>
+	<ui:define name="principal">
+
+	   <p:panel header="Cadastro de Reparação de Residência">
+	     <h:form id="form-reparacao">
+	     <p:growl id="msgs" autoUpdate="true"/>
+	     
+	     <p:toolbar id="toolbar">
+			<f:facet name="left">
+			   <p:commandButton value="Nova" icon="ui-icon-document"
+			          oncomplete="PF('cadastroReparacaoDialog').show()" process="@this"
+				      update="reparacao-dialog">
+				  <p:resetInput target="" />
+			  </p:commandButton>
+			    
+			 <span class="ui-separator"> 
+		       <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		     </span>
+		     
+		     <p:commandButton title="Editar" icon="ui-icon-pencil" 
+		        disabled="#{reparacaoBean.reparacaoSelecionada == null}"
+		        oncomplete="PF('cadastroReparacaoDialog').show()" process="@this"
+				update="reparacao-dialog">
+				 <p:resetInput target="reparacao-dialog" />
+				<f:setPropertyActionListener target="#{reparacaoBean.reparacao}"
+					value="#{reparacaoBean.reparacaoSelecionada}"/> 
+			</p:commandButton>
+		     <p:commandButton title="Apagar" icon="ui-icon-trash"
+		        disabled="#{reparacaoBean.reparacaoSelecionada == null}"
+		        oncomplete="PF('exclusaoReparacaoDialog').show()" process="@this">
+		        </p:commandButton>
+			</f:facet>
+       </p:toolbar>
+
+		    <br />
+	
+	      <p:dataTable value="#{reparacaoBean.reparacoes}" var="reparacao" id="tabela-reparacoes" 
+	        paginator="true" rows="5" rowsPerPageTemplate="5, 15, 25"
+	        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                        {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					selection="#{reparacaoBean.reparacaoSelecionada}" selectionMode="single"
+					rowKey="#{reparacao.id}" >
+					
+			 <p:ajax event="rowSelect" update=":form-reparacao:toolbar"/>
+			 <p:ajax event="rowUnselect" update=":form-reparacao:toolbar"/>
+					
+					
+			  <p:column headerText="Tipo das Avarias">
+			  <h:outputText value="#{reparacao.nome}"/>
+	          </p:column>
+			  
+			  <p:column headerText="Residência"  >
+	           <h:outputText value="#{reparacao.instalacao.label}"/>
+	          </p:column>
+	          
+	      </p:dataTable>
+	      
+	    <p:dialog header="Nova Reparação" widgetVar="cadastroReparacaoDialog"
+	         modal="true" resizable="false" draggable="false" 
+	         id="reparacao-dialog" closeOnEscape="true">
+	      
+	            <h:panelGrid columns="2" cellpadding="5" id="reparacao-grid">
+	            <ui:remove>           
+	             <h:outputText value="Nome"/>
+	              <p:selectOneMenu value="#{reparacaoBean.reparacao.instalacao}">
+	                     <f:selectItem itemLabel="::Selecione::" itemValue="#{nul}"/>
+                         <f:selectItems value="#{reparacaoBean.instalacoes}" var="instalacao"
+                           itemLabel="#{instalacao.label}" itemValue="#{instalacao}"/>
+	              </p:selectOneMenu> 
+	              </ui:remove>
+	             <h:outputText value="Avarias"/>
+	             <p:inputText value="#{reparacaoBean.reparacao.nome}"/>
+                 	 
+            <p:outputLabel value="Residência:"/>               
+                        <p:selectOneMenu value="#{reparacaoBean.reparacao.instalacao}">
+	                     <f:selectItem itemLabel="::Selecione::" itemValue="#{nul}"/>
+                         <f:selectItems value="#{reparacaoBean.instalacoes}" var="instalacao"
+                      itemLabel="#{instalacao.label}" itemValue="#{instalacao}"/>
+	                </p:selectOneMenu>
+				 </h:panelGrid>
+	 
+				  <p:commandButton value="Salvar" icon="ui-icon-disk"
+					action="#{reparacaoBean.salvar}"
+					oncomplete="if(!args.validationFailed) PF('cadastroReparacaoDialog').hide()"
+					update="tabela-reparacoes toolbar reparacao-grid" />
+				 
+				<p:commandButton value="Cancelar" icon="ui-icon-close"
+				   style="margin-left:8px;"
+				   oncomplete=" PF('cadastroReparacaoDialog').hide()" process="@this"
+					action="#{reparacaoBean.cancelar}" update="tabela-reparacoes toolbar reparacao-grid"/>
+					
+			</p:dialog>
+	      
+	        <p:confirmDialog message="Deseja realmente excluir esta Reparacao?"
+			  widgetVar="exclusaoReparacaoDialog" header="Excluir Reparacao">
+             <p:commandButton value="Sim" action="#{reparacaoBean.excluir}"
+			    process="@this" oncomplete="PF('exclusaoReparacaoDialog').hide()"
+			    update="toolbar tabela-reparacoes" />
+			    <p:commandButton value="Não"
+				oncomplete="PF('exclusaoReparacaoDialog').hide()" process="@this"
+				update="toolbar tabela-reparacoes">
+				<f:setPropertyActionListener
+			   target="#{reparacaoBean.reparacaoSelecionada}" value="#{null}" />
+			</p:commandButton>
+		</p:confirmDialog>
+	        
+	    
+			    
+	    </h:form>
+	   </p:panel>
+	</ui:define>
+</ui:composition>

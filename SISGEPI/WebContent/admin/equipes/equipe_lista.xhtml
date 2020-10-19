@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Lista de Equipes" style="width:100%;" 
+                 rendered="#{equipeBean.equipe == null}">
+        
+            <p:commandButton icon="adicionar-icon" value="Nova Equipe" style="color:green;" 
+            action="#{equipeBean.novaEquipe}"
+                             update="@form"/>
+            <br/><br/>
+            
+           <p:dataTable value="#{equipeBean.equipes}" var="equipe" style="width:500px;">
+               
+               <p:column headerText="Nome" style="width:50px;">
+                     <h:outputText value="#{equipe.nome}"/>
+               </p:column>
+               
+               <p:column headerText="Sigla:" style="width:50px;">
+		         <h:outputText value="#{equipe.sigla}"/>
+		     </p:column>
+
+		     <p:column headerText="Semestre:" style="width:60px;">
+		         <h:outputText value="#{equipe.semestre.label}" />
+		     </p:column>
+		     
+		     <p:column headerText="Activo:" style="width:20px;">
+		         <h:outputText value="#{equipe.activo}" />
+		     </p:column>
+		     
+		     <p:column headerText="Editar" style="width:20px;">
+				<p:commandButton icon="editar-icon" action="#{equipeBean.editarEqipe(equipe)}"
+				       	update="@form"/>
+			</p:column>
+	
+		</p:dataTable>
+          
+        </p:panel>
+  
+</html>

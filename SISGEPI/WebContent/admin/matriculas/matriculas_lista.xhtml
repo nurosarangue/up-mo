@@ -1,0 +1,49 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Lista de Cadastros" style="width:100%;" 
+                 rendered="#{matriculaBean.matricula == null}">
+        
+            <p:commandButton icon="adicionar-icon" value="Novo Cadastro" style="color:green;" 
+            action="#{matriculaBean.novaMatricula}"
+                             update="matricula_form"/>
+            <br/><br/>
+              
+              <p:dataTable value="#{matriculaBean.matriculaVos}" var="matricula">
+                  
+                 
+                   <p:column headerText="Nome:" filterBy="#{matricula.nome}"
+                         filterMatchMode="contains">
+                     <h:outputText value="#{matricula.nome}"/>
+                  </p:column>
+                
+                 
+                  <p:column headerText="Profissão:">
+                     <h:outputText value="#{matricula.nomeAvaria}"/>
+                  </p:column>
+               
+                  <p:column headerText="Data:">
+                     <h:outputText value="#{matricula.data}">
+                         <f:convertDateTime pattern="dd/MM/yyy"/>
+                     </h:outputText>
+                  </p:column>
+              
+
+			<p:column width="50" style="text-align:center">
+				<p:commandButton icon="editar-icon" action="#{matriculaBean.editar(matricula.id)}"
+					 update=":matricula_form"/>
+			</p:column>
+   
+              </p:dataTable>
+            
+              
+        </p:panel>
+  
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+    
+        
+        <p:panel header="Resisto de Avenidas" rendered="#{avenidaBean.avenida != null}"
+                 id="lista-avenida-panel">
+             <p:panelGrid columns="2">
+             
+                <h:outputLabel value="Avenida"/>
+                <p:inputText value="#{avenidaBean.avenida.nome}" />
+            
+             </p:panelGrid>
+             <br/>
+             <p:commandButton icon="salvar-icon" value="Salvar" style="color:green;" action="#{avenidaBean.salvar}"
+             update="@form" id="btn-salvar"/>
+             
+             <p:commandButton icon="voltar-icon" value="Voltar" action="#{avenidaBean.voltar}" update="@form"
+             immediate="true"/>
+             
+        </p:panel>
+
+</html>
+

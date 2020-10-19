@@ -1,0 +1,34 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+      
+        <p:panel header="Cadastro de Funcionarios" 
+           rendered="#{usuarioFuncionarioBean.usuarioFuncionario != null}">
+      
+           <p:panelGrid columns="2">
+         
+              <h:outputLabel value="Nome:"/>
+              <p:inputText value="#{usuarioFuncionarioBean.usuarioFuncionario.nome}"/>
+               <h:outputLabel value="Email:"/>
+              <p:inputText value="#{usuarioFuncionarioBean.usuarioFuncionario.email}"/>
+              <h:outputLabel value="Profissão:"/>
+              <p:inputText value="#{usuarioFuncionarioBean.usuarioFuncionario.grauIntrucao}"/>
+              <h:outputLabel value="Activo:"/>
+			  <p:selectBooleanCheckbox value="#{usuarioFuncionarioBean.usuarioFuncionario.activo}"/>        
+           
+           </p:panelGrid>
+           <br/>
+           <p:commandButton value="Salvar" icon="fa fa-check" action="#{usuarioFuncionarioBean.salvar}" 
+              update="usuario_funcionario_form"/>
+              
+           <p:commandButton value="Cancelar" icon="fa fa-arrow-left" action="#{usuarioFuncionarioBean.cancelar}" 
+              update="usuario_funcionario_form"/>
+        </p:panel>
+  
+</html>
